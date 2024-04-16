@@ -1,4 +1,4 @@
-ARG VERSION=v3.4.0
+ARG VERSION="8705969"
 
 FROM node:16-buster-slim AS builder
 
@@ -6,19 +6,17 @@ ARG VERSION
 
 WORKDIR /build
 
-RUN apt-get update
+RUN apt-get update && \
+    apt-get install -y git python3 build-essential
 
-RUN apt-get install -y git python3 build-essential
-
-RUN git clone --branch $VERSION https://github.com/janoside/btc-rpc-explorer .
+RUN git clone https://github.com/janoside/btc-rpc-explorer . && \
+    git checkout $VERSION
 
 # Make sure we can pull git npm dependencies
-RUN git config --global url."https://github.com/".insteadOf git@github.com:
-RUN git config --global url."https://".insteadOf ssh://
+RUN git config --global url."https://github.com/".insteadOf git@github.com: && \
+    git config --global url."https://".insteadOf ssh://
 
-RUN npm ci --production
-
-RUN rm -rf .git
+RUN npm ci --production && rm -rf .git
 
 FROM node:16-buster-slim
 
