@@ -1,5 +1,3 @@
-ARG VERSION="8705969"
-
 FROM node:16-buster-slim AS builder
 
 ARG VERSION
@@ -16,9 +14,11 @@ RUN git clone https://github.com/janoside/btc-rpc-explorer . && \
 RUN git config --global url."https://github.com/".insteadOf git@github.com: && \
     git config --global url."https://".insteadOf ssh://
 
-RUN npm ci --production && rm -rf .git
+RUN npm install
 
 FROM node:16-buster-slim
+
+RUN apt-get update && apt-get install -y git
 
 USER 1000
 
