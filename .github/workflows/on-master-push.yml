@@ -38,7 +38,7 @@ jobs:
       - name: Run Docker buildx
         run: |
           docker buildx build \
-          --platform linux/amd64,linux/arm64,linux/arm/v7 \
+          --platform $(cat PLATFORMS | tr '\n' ',') \
           --build-arg VERSION=$VERSION \
           --tag ${{ secrets.DOCKER_HUB_USER }}/btc-rpc-explorer:$VERSION \
           --tag ${{ secrets.DOCKER_HUB_USER }}/btc-rpc-explorer \
